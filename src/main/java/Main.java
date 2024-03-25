@@ -12,10 +12,10 @@ public class Main {
 //     You can use print statements as follows for debugging, they'll be visible when running tests.
     System.out.println("Logs from your program will appear here!");
 
-    Runnable runnable = new ThreadRunnable();
+
 
     for (int i = 0; i < 2; i++ ) {
-
+      Runnable runnable = new ThreadRunnable();
       Thread thread = new Thread(runnable);
       thread.start();
     }
