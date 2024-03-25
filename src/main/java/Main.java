@@ -14,7 +14,7 @@ public class Main {
 
 
 
-    for (int i = 0; i < 2; i++ ) {
+    while (true) {
       Runnable runnable = new ThreadRunnable();
       Thread thread = new Thread(runnable);
       thread.start();
