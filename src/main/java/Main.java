@@ -12,48 +12,12 @@ public class Main {
 //     You can use print statements as follows for debugging, they'll be visible when running tests.
     System.out.println("Logs from your program will appear here!");
 
-    ServerSocket serverSocket = null;
-    Socket clientSocket = null;
-    int port = 6379;
-    try {
-      // 서버 생성
-      serverSocket = new ServerSocket(port);
-      serverSocket.setReuseAddress(true);
-      // Client 접속 Accept
-      clientSocket = serverSocket.accept();
+    Runnable runnable = new ThreadRunnable();
 
-      // client 가 보낸 message
-      // DataInputStream is = new DataInputStream(clientSocket.getInputStream());
-      BufferedReader br = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-//      BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
-//      bw.write(OK);
-//      bw.flush();
-//      bw.close();
+    for (int i = 0; i < 2; i++ ) {
 
-
-      while (true) {
-        String readLine = br.readLine();
-        try {
-          if (readLine.contains("ping")) {
-            clientSocket.getOutputStream().write(OK.getBytes(StandardCharsets.UTF_8));
-          }
-        } catch (Exception e) {
-          break;
-        }
-      }
-
-
-
-    } catch (IOException e) {
-      System.out.println("IOException: " + e.getMessage());
-    } finally {
-      try {
-        if (clientSocket != null) {
-          clientSocket.close();
-        }
-      } catch (IOException e) {
-        System.out.println("IOException: " + e.getMessage());
-      }
+      Thread thread = new Thread(runnable);
+      thread.start();
     }
   }
 }
