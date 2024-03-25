@@ -25,12 +25,24 @@ public class Main {
       // client 가 보낸 message
       // DataInputStream is = new DataInputStream(clientSocket.getInputStream());
       BufferedReader br = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+//      BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
+//      bw.write(OK);
+//      bw.flush();
+//      bw.close();
 
-      // client 에 data 전송
-      BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
-      bw.write(OK);
-      bw.flush();
-      bw.close();
+
+      while (true) {
+        String readLine = br.readLine();
+        try {
+          if (readLine.contains("ping")) {
+            clientSocket.getOutputStream().write(OK.getBytes(StandardCharsets.UTF_8));
+          }
+        } catch (Exception e) {
+          break;
+        }
+      }
+
+
 
     } catch (IOException e) {
       System.out.println("IOException: " + e.getMessage());
