@@ -29,7 +29,6 @@ public class Main {
       // client 에 data 전송
       BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
       bw.write(OK);
-      bw.newLine();
       bw.flush();
       bw.close();
 
