@@ -8,7 +8,7 @@ import java.util.List;
 
 public class Main {
   public final static String OK = "+PONG\r\n";
-  public static void main(String[] args){
+  public static void main(String[] args) throws InterruptedException {
 //     You can use print statements as follows for debugging, they'll be visible when running tests.
     System.out.println("Logs from your program will appear here!");
 
@@ -18,6 +18,7 @@ public class Main {
       Runnable runnable = new ThreadRunnable();
       Thread thread = new Thread(runnable);
       thread.start();
+      thread.join();
     }
   }
 }
