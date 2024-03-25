@@ -18,6 +18,7 @@ public class Main {
       Runnable runnable = new ThreadRunnable();
       Thread thread = new Thread(runnable);
       thread.start();
+      Thread.sleep(1000);
       thread.join();
     }
   }
