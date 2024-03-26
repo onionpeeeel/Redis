@@ -6,18 +6,14 @@ import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 
 public class ThreadRunnable implements Runnable {
-    public final static String OK = "+PONG\r\n";
+    public final static byte[] OK = "+PONG\r\n".getBytes(StandardCharsets.UTF_8);
 
-    public final static int port = 6379;
+    public final static byte[] HEY = "+hey\r\n".getBytes(StandardCharsets.UTF_8);
 
-    public static ServerSocket serverSocket;
+    private final Socket clientSocket;
 
-    static {
-        try {
-            serverSocket = new ServerSocket(port);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    public ThreadRunnable(Socket clientSocket) {
+        this.clientSocket = clientSocket;
     }
 
     public void run() {
@@ -26,16 +22,22 @@ public class ThreadRunnable implements Runnable {
     }
 
     public void multiConnect() {
-        Socket clientSocket = null;
         try {
-            clientSocket = serverSocket.accept();
             BufferedReader br = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
             while (true) {
                 String readline = br.readLine();
                 try {
                     if (readline.contains("ping")) {
-                        clientSocket.getOutputStream().write(OK.getBytes(StandardCharsets.UTF_8));
+                        clientSocket.getOutputStream().write(OK);
+                    } else if (readline.contains("echo")) {
+                        while (true) {
+                            readline = br.readLine();
+                            if (readline.contains("hey")) {
+                                clientSocket.getOutputStream().write(HEY);
+                            }
+                        }
+
                     }
                 } catch (Exception e) {
                     break;
