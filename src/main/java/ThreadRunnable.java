@@ -33,8 +33,12 @@ public class ThreadRunnable implements Runnable {
                     } else if (readline.contains("echo")) {
                         while (true) {
                             readline = br.readLine();
-                            if (readline.contains("hey")) {
+                            System.out.println(readline);
+
+                            if (readline.equals("$3")) {
+                                readline = br.readLine();
                                 clientSocket.getOutputStream().write(HEY);
+                                break;
                             }
                         }
 
