@@ -27,8 +27,14 @@ public class ThreadRunnable implements Runnable {
         multiConnect();
     }
 
-    public byte[] returnCommand(String command) {
-        String returnCommand = "+" + command + "\r\n";
+    public byte[] returnCommand(String command, String type) {
+        String returnCommand = "";
+
+        if ("simple".equals(type)) {
+            returnCommand = "+" + command + "\r\n";
+        } else if ("bulk".equals(type)) {
+            returnCommand = "$3\r\n" + command + "\r\n";
+        }
 
         return returnCommand.getBytes(StandardCharsets.UTF_8);
     }
@@ -52,7 +58,7 @@ public class ThreadRunnable implements Runnable {
                             if (readline.startsWith("$")) {
                                 continue;
                             }
-                            clientSocket.getOutputStream().write(returnCommand(readline));
+                            clientSocket.getOutputStream().write(returnCommand(readline, "simple"));
                         }
 
                     } else if (readline.contains("set")) {
@@ -81,7 +87,7 @@ public class ThreadRunnable implements Runnable {
                             } else {
                                 System.out.println(readline);
                                 if (commandList.containsKey(readline)) {
-                                    clientSocket.getOutputStream().write(returnCommand(commandList.get(readline)));
+                                    clientSocket.getOutputStream().write(returnCommand(commandList.get(readline), "bulk"));
                                 }
                             }
                         }
