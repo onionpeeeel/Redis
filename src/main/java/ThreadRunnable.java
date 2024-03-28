@@ -21,6 +21,12 @@ public class ThreadRunnable implements Runnable {
         multiConnect();
     }
 
+    public byte[] returnCommand(String command) {
+        String returnCommand = "+" + command + "\r\n";
+
+        return returnCommand.getBytes(StandardCharsets.UTF_8);
+    }
+
     public void multiConnect() {
         try {
             BufferedReader br = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
@@ -36,7 +42,7 @@ public class ThreadRunnable implements Runnable {
                             if (readline.startsWith("$")) {
                                 continue;
                             }
-                            clientSocket.getOutputStream().write(HEY);
+                            clientSocket.getOutputStream().write(returnCommand(readline));
                         }
 
                     }
