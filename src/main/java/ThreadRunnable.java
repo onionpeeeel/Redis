@@ -33,7 +33,7 @@ public class ThreadRunnable implements Runnable {
         if ("simple".equals(type)) {
             returnCommand = "+" + command + "\r\n";
         } else if ("bulk".equals(type)) {
-            returnCommand = "$3\r\n" + command + "\r\n";
+            returnCommand = "$"+ command.length() + "\r\n" + command + "\r\n";
         }
 
         return returnCommand.getBytes(StandardCharsets.UTF_8);
