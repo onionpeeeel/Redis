@@ -4,11 +4,15 @@ import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ThreadRunnable implements Runnable {
     public final static byte[] OK = "+PONG\r\n".getBytes(StandardCharsets.UTF_8);
 
     public final static byte[] HEY = "+hey\r\n".getBytes(StandardCharsets.UTF_8);
+
+    public static Map<String, String> commandList = new HashMap<>();
 
     private final Socket clientSocket;
 
@@ -25,6 +29,10 @@ public class ThreadRunnable implements Runnable {
         String returnCommand = "+" + command + "\r\n";
 
         return returnCommand.getBytes(StandardCharsets.UTF_8);
+    }
+
+    public void commandSave(String key, String value) {
+        commandList.put(key, value);
     }
 
     public void multiConnect() {
@@ -45,6 +53,26 @@ public class ThreadRunnable implements Runnable {
                             clientSocket.getOutputStream().write(returnCommand(readline));
                         }
 
+                    } else if (readline.contains("set")) {
+                        while (true) {
+                            readline = br.readLine();
+                            if (readline.startsWith("$")) {
+                                continue;
+                            } else {
+                                String key = readline;
+                                readline = br.readLine();
+                                if (readline.startsWith("$")) {
+                                    readline = br.readLine();
+                                    if (!readline.startsWith("$")) {
+                                        String value = readline;
+                                        commandSave(key, value);
+                                        clientSocket.getOutputStream().write(OK);
+                                    }
+                                }
+                            }
+                        }
+                    } else if (commandList.containsKey(readline)) {
+                        clientSocket.getOutputStream().write(returnCommand(commandList.get(readline)));
                     }
                 } catch (Exception e) {
                     break;
