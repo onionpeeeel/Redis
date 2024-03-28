@@ -76,9 +76,11 @@ public class ThreadRunnable implements Runnable {
                     } else if (readline.contains("get")) {
                         while (true) {
                             readline = br.readLine();
+                            System.out.println(readline);
                             if (readline.startsWith("$")) {
                                 continue;
                             } else {
+                                System.out.println(readline);
                                 if (commandList.containsKey(readline)) {
                                     clientSocket.getOutputStream().write(returnCommand(commandList.get(readline)));
                                 }
