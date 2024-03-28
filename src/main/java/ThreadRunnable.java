@@ -79,7 +79,7 @@ public class ThreadRunnable implements Runnable {
                                 }
                             }
                         }
-                    } else if (readline.contains("get")) {
+                    } else if (readline.equals("get")) {
                         while (true) {
                             readline = br.readLine();
                             if (readline.startsWith("$")) {
