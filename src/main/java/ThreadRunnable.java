@@ -8,7 +8,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ThreadRunnable implements Runnable {
-    public final static byte[] OK = "+PONG\r\n".getBytes(StandardCharsets.UTF_8);
+    public final static byte[] PONG = "+PONG\r\n".getBytes(StandardCharsets.UTF_8);
+
+    public final static byte[] OK = "+OK\r\n".getBytes(StandardCharsets.UTF_8);
 
     public final static byte[] HEY = "+hey\r\n".getBytes(StandardCharsets.UTF_8);
 
@@ -43,7 +45,7 @@ public class ThreadRunnable implements Runnable {
                 String readline = br.readLine();
                 try {
                     if (readline.contains("ping")) {
-                        clientSocket.getOutputStream().write(OK);
+                        clientSocket.getOutputStream().write(PONG);
                     } else if (readline.contains("echo")) {
                         while (true) {
                             readline = br.readLine();
