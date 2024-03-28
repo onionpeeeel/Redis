@@ -73,8 +73,17 @@ public class ThreadRunnable implements Runnable {
                                 }
                             }
                         }
-                    } else if (commandList.containsKey(readline)) {
-                        clientSocket.getOutputStream().write(returnCommand(commandList.get(readline)));
+                    } else if (readline.contains("get")) {
+                        while (true) {
+                            readline = br.readLine();
+                            if (readline.startsWith("$")) {
+                                continue;
+                            } else {
+                                if (commandList.containsKey(readline)) {
+                                    clientSocket.getOutputStream().write(returnCommand(commandList.get(readline)));
+                                }
+                            }
+                        }
                     }
                 } catch (Exception e) {
                     break;
