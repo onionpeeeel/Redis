@@ -73,7 +73,6 @@ public class ThreadRunnable implements Runnable {
                         case Commands.GET:
                             String getKey = storedCommand.get(3);
                             String getValue = commandList.get(getKey);
-
                             if (getValue == null) {
                                 clientSocket.getOutputStream().write("$-1\r\n".getBytes(StandardCharsets.UTF_8));
                             } else {
@@ -82,6 +81,7 @@ public class ThreadRunnable implements Runnable {
                             break;
                     }
                 }
+                input = br.readLine();
             }
         } catch (IOException e) {
             System.out.println("IOException: " + e.getMessage());
