@@ -13,9 +13,14 @@ public class Main {
   public static void main(String[] args) throws IOException{
 //     You can use print statements as follows for debugging, they'll be visible when running tests.
     System.out.println("Logs from your program will appear here!");
+    System.out.println(Arrays.toString(args));
 
     Socket clientSocket;
     int port = 6379;
+
+    if (args[0].equals("--port")) {
+      port = Integer.parseInt(args[1]);
+    }
 
     try (ServerSocket serverSocket = new ServerSocket(port);
          ExecutorService executorService = Executors.newFixedThreadPool(8)) {
