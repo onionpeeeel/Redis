@@ -22,8 +22,10 @@ public class Main {
     if (args.length > 0) {
       if ("--port".equals(args[0])) {
         port = Integer.parseInt(args[1]);
-        if ("--replicaof".equals(args[2])) {
-          role = "slave";
+        if (args.length > 2) {
+          if ("--replicaof".equals(args[2])) {
+            role = "slave";
+          }
         }
       }
     }
