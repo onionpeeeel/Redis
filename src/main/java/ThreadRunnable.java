@@ -94,6 +94,8 @@ public class ThreadRunnable implements Runnable {
                                 clientSocket.getOutputStream().write(returnCommand(getValue, "bulk"));
                             }
                             break;
+                        case Commands.INFO:
+                            clientSocket.getOutputStream().write(returnCommand("role:master", "bulk"));
                     }
                 }
                 input = br.readLine();
