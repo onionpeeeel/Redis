@@ -18,7 +18,7 @@ public class Main {
     Socket clientSocket;
     int port = 6379;
 
-    if (args[0].equals("--port")) {
+    if ("--port".equals(args[0])) {
       port = Integer.parseInt(args[1]);
     }
 
