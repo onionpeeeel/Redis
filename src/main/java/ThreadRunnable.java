@@ -23,9 +23,11 @@ public class ThreadRunnable implements Runnable {
     private final Socket clientSocket;
 
     private final static TimedCache<String, String> commandList = new TimedCache<>();
+    private final String role;
 
-    public ThreadRunnable(Socket clientSocket) {
+    public ThreadRunnable(Socket clientSocket, String role) {
         this.clientSocket = clientSocket;
+        this.role = role;
     }
 
     public void run() {
@@ -95,7 +97,7 @@ public class ThreadRunnable implements Runnable {
                             }
                             break;
                         case Commands.INFO:
-                            clientSocket.getOutputStream().write(returnCommand("role:master", "bulk"));
+                            clientSocket.getOutputStream().write(returnCommand("role:" + role, "bulk"));
                     }
                 }
                 input = br.readLine();

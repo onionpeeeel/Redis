@@ -17,10 +17,14 @@ public class Main {
 
     Socket clientSocket;
     int port = 6379;
+    String role = "master";
 
     if (args.length > 0) {
       if ("--port".equals(args[0])) {
         port = Integer.parseInt(args[1]);
+        if ("--replicaof".equals(args[2])) {
+          role = "slave";
+        }
       }
     }
 
@@ -31,7 +35,7 @@ public class Main {
       while (true) {
         clientSocket = serverSocket.accept();
         System.out.println("Got connection with " + clientSocket.getPort());
-        executorService.submit(new ThreadRunnable(clientSocket));
+        executorService.submit(new ThreadRunnable(clientSocket, role));
       }
     }
 
