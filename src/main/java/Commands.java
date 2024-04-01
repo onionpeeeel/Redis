@@ -6,4 +6,6 @@ public class Commands {
     public static final String SET = "set";
 
     public static final String GET = "get";
+
+    public static final String PX = "px";
 }

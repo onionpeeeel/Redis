@@ -1,0 +1,8 @@
+[15:01:54 2024-03-29] FETCHING Version 2.36.1
+[15:01:54 2024-03-29] DOWNLOADING https://github.com/spicetify/spicetify-cli/releases/download/v2.36.1/spicetify-2.36.1-darwin-arm64.tar.gz
+[15:01:57 2024-03-29] EXTRACTING /Users/jaeseoko/.spicetify/spicetify.tar.gz
+[15:01:57 2024-03-29] SETTING EXECUTABLE PERMISSIONS TO /Users/jaeseoko/.spicetify/spicetify
+[15:01:57 2024-03-29] REMOVING /Users/jaeseoko/.spicetify/spicetify.tar.gz
+[15:01:57 2024-03-29] spicetify path already set in /Users/jaeseoko/.zshrc, continuing...
+[15:01:57 2024-03-29] spicetify v2.36.1 was installed successfully to /Users/jaeseoko/.spicetify
+[15:01:57 2024-03-29] Run 'spicetify --help' to get started

@@ -7,6 +7,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ThreadRunnable implements Runnable {
     public final static byte[] PONG = "+PONG\r\n".getBytes(StandardCharsets.UTF_8);
@@ -15,9 +16,13 @@ public class ThreadRunnable implements Runnable {
 
     public final static byte[] HEY = "+hey\r\n".getBytes(StandardCharsets.UTF_8);
 
-    public static Map<String, String> commandList = new HashMap<>();
+//    public static ConcurrentHashMap<String, String> commandList = new ConcurrentHashMap<>();
+
+    public static ConcurrentHashMap<String, Long> expireCommandList = new ConcurrentHashMap<>();
 
     private final Socket clientSocket;
+
+    private final static TimedCache<String, String> commandList = new TimedCache<>();
 
     public ThreadRunnable(Socket clientSocket) {
         this.clientSocket = clientSocket;
@@ -41,7 +46,7 @@ public class ThreadRunnable implements Runnable {
     }
 
     public void commandSave(String key, String value) {
-        commandList.put(key, value);
+        commandList.put(key, value, 0);
     }
 
     public void multiConnect() {
@@ -67,7 +72,10 @@ public class ThreadRunnable implements Runnable {
                         case Commands.SET:
                             String key = storedCommand.get(3);
                             String value = storedCommand.get(5);
-                            commandList.put(key, value);
+                            if (Commands.PX.equals(storedCommand.get(7))) {
+                                commandList.put(key, value, Long.parseLong(storedCommand.get(9)));
+                            }
+                            commandList.put(key, value, 0);
                             clientSocket.getOutputStream().write(OK);
                             break;
                         case Commands.GET:
