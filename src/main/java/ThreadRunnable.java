@@ -25,6 +25,8 @@ public class ThreadRunnable implements Runnable {
     private final static TimedCache<String, String> commandList = new TimedCache<>();
     private final String role;
 
+    private final String randomString = "8371b4fb1155b71f4a04d3e1bc3e18c4a990aeeb";
+
     public ThreadRunnable(Socket clientSocket, String role) {
         this.clientSocket = clientSocket;
         this.role = role;
@@ -97,10 +99,14 @@ public class ThreadRunnable implements Runnable {
                             }
                             break;
                         case Commands.INFO:
-                            clientSocket.getOutputStream().write(returnCommand("role:" + role, "bulk"));
                             if (storedCommand.size() > 3) {
-                                clientSocket.getOutputStream().write(returnCommand("master_replid:" + "8371b4fb1155b71f4a04d3e1bc3e18c4a990aeeb", "bulk"));
-                                clientSocket.getOutputStream().write(returnCommand("master_repl_offset:0", "bulk"));
+                                String returnVal = "role:" + role + "\n" + "master_replid:" + randomString + "\n" + "master_repl_offset:0";
+                                clientSocket.getOutputStream().write(returnCommand(returnVal, "bulk"));
+//                                clientSocket.getOutputStream().write(returnCommand("role:" + role, "bulk"));
+//                                clientSocket.getOutputStream().write(returnCommand("master_replid:" + "8371b4fb1155b71f4a04d3e1bc3e18c4a990aeeb", "bulk"));
+//                                clientSocket.getOutputStream().write(returnCommand("master_repl_offset:0", "bulk"));
+                            } else {
+                                clientSocket.getOutputStream().write(returnCommand("role:" + role, "bulk"));
                             }
                     }
                 }
