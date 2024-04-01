@@ -62,6 +62,7 @@ public class ThreadRunnable implements Runnable {
                         storedCommand.add(br.readLine());
                     }
                     String command = storedCommand.get(1);
+                    System.out.println(storedCommand);
                     switch (command.toLowerCase()) {
                         case Commands.PING:
                             clientSocket.getOutputStream().write(PONG);
@@ -72,10 +73,16 @@ public class ThreadRunnable implements Runnable {
                         case Commands.SET:
                             String key = storedCommand.get(3);
                             String value = storedCommand.get(5);
-                            if (Commands.PX.equals(storedCommand.get(7))) {
-                                commandList.put(key, value, Long.parseLong(storedCommand.get(9)));
+                            if (storedCommand.size() > 6) {
+                                if (Commands.PX.equals(storedCommand.get(7))) {
+                                    commandList.put(key, value, Long.parseLong(storedCommand.get(9)));
+                                } else {
+                                    commandList.put(key, value, -1);
+                                }
+                            } else {
+                                commandList.put(key, value, -1);
                             }
-                            commandList.put(key, value, 0);
+
                             clientSocket.getOutputStream().write(OK);
                             break;
                         case Commands.GET:
