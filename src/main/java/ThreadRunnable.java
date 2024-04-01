@@ -97,6 +97,10 @@ public class ThreadRunnable implements Runnable {
                             }
                             break;
                         case Commands.INFO:
+                            if (storedCommand.size() > 3) {
+                                clientSocket.getOutputStream().write(returnCommand("master_replid:" + "8371b4fb1155b71f4a04d3e1bc3e18c4a990aeeb", "bulk"));
+                                clientSocket.getOutputStream().write(returnCommand("master_repl_offset:0", "bulk"));
+                            }
                             clientSocket.getOutputStream().write(returnCommand("role:" + role, "bulk"));
                     }
                 }
