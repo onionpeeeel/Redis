@@ -12,6 +12,7 @@ public class SlaveServer implements Runnable{
         System.out.println("Running Slave Thread");
         try {
             clientSocket = new Socket(redisProperties.getMasterNode(), Integer.parseInt(redisProperties.getMasterPort()));
+            clientSocket.getOutputStream().write("*1\r\n$4\r\nping\r\n".getBytes(StandardCharsets.UTF_8));
         } catch (IOException e) {
             System.out.println("IOException: " + e.getMessage());
         }
