@@ -50,7 +50,6 @@ public class MasterServer implements Runnable{
         try {
             BufferedReader br = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             String input = br.readLine();
-            System.out.println(input);
 
             while (input != null && !input.isEmpty()) {
                 if (input.startsWith("*")) {
@@ -97,6 +96,12 @@ public class MasterServer implements Runnable{
                                 clientSocket.getOutputStream().write(returnCommand(returnVal, "bulk"));
                             } else {
                                 clientSocket.getOutputStream().write(returnCommand("role:" + role, "bulk"));
+                            }
+                            break;
+                        case Commands.REPLCONF:
+                            if (storedCommand.contains(Commands.PSYNC)) {
+                                String psyncSent = "+FULLRESYNC " + redisProperties.getReplicationId() + " 0\r\n";
+                                clientSocket.getOutputStream().write(returnCommand(psyncSent, "simple"));
                             }
                             break;
                     }
