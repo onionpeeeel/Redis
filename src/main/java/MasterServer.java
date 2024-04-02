@@ -98,12 +98,12 @@ public class MasterServer implements Runnable{
                                 clientSocket.getOutputStream().write(returnCommand("role:" + role, "bulk"));
                             }
                             break;
-                        case Commands.REPLCONF:
-                            if (storedCommand.contains(Commands.PSYNC)) {
-                                String psyncSent = "+FULLRESYNC " + redisProperties.getReplicationId() + " 0\r\n";
-                                clientSocket.getOutputStream().write(returnCommand(psyncSent, "simple"));
-                            }
-                            break;
+//                        case Commands.REPLCONF:
+//                            if (storedCommand.contains(Commands.PSYNC)) {
+//                                String psyncSent = "+FULLRESYNC " + redisProperties.getReplicationId() + " 0\r\n";
+//                                clientSocket.getOutputStream().write(returnCommand(psyncSent, "simple"));
+//                            }
+//                            break;
                     }
                 }
                 input = br.readLine();
