@@ -91,15 +91,12 @@ public class SlaveServer implements Runnable{
                             if (storedCommand.size() > 3) {
                                 String returnVal = "role:" + role + "\n" + "master_replid:" + redisProperties.getReplicationId() + "\n" +
                                         "master_repl_offset:" + redisProperties.getReplicationOffset();
+                                clientSocket.getOutputStream().write(returnCommand(returnVal, "bulk"));
                             } else {
                                 clientSocket.getOutputStream().write(returnCommand("role:" + role, "bulk"));
                             }
                             break;
-                        default:
-                            clientSocket.getOutputStream().write(returnCommand("PING", "simple"));
                     }
-                } else {
-                    clientSocket.getOutputStream().write(returnCommand("PING", "simple"));
                 }
                 input = br.readLine();
             }
