@@ -95,6 +95,8 @@ public class SlaveServer implements Runnable{
                                 clientSocket.getOutputStream().write(returnCommand("role:" + role, "bulk"));
                             }
                             break;
+                        default:
+                            clientSocket.getOutputStream().write(returnCommand("PING", "simple"));
                     }
                 }
                 input = br.readLine();
