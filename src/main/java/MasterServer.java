@@ -4,6 +4,9 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
 public class MasterServer implements Runnable{
 
@@ -49,7 +52,17 @@ public class MasterServer implements Runnable{
     public void multiConnect() {
         try {
             BufferedReader br = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            String input = br.readLine();
+            String input = null;
+            String line;
+            List<String> inputList = new ArrayList<>();
+            if (br.readLine() != null && br.readLine() instanceof String) {
+                input = br.readLine();
+            } else {
+                while ((line = br.readLine()) != null) {
+                    inputList.add(line);
+                }
+            }
+
 
             while (input != null && !input.isEmpty()) {
                 if (input.startsWith("*")) {
