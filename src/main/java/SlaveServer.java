@@ -98,6 +98,8 @@ public class SlaveServer implements Runnable{
                         default:
                             clientSocket.getOutputStream().write(returnCommand("PING", "simple"));
                     }
+                } else {
+                    clientSocket.getOutputStream().write(returnCommand("PING", "simple"));
                 }
                 input = br.readLine();
             }
