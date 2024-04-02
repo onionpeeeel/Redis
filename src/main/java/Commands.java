@@ -11,6 +11,12 @@ public class Commands {
 
     public static final String INFO = "info";
 
+    public static final String REPLCONF = "replconf";
+
+    public static final String CAPA = "capa";
+
+    public static final String PSYNC = "psync";
+
     public static String replconf(int reqPort) {
         String port = String.valueOf(reqPort);
 
