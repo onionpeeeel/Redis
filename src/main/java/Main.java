@@ -39,7 +39,7 @@ public class Main {
          ExecutorService executorService = Executors.newFixedThreadPool(8)) {
       serverSocket.setReuseAddress(true);
 
-      if (Objects.equals("master", role)) {
+      if (!Objects.equals("master", role)) {
         clientSocket = new Socket(redisProperties.getMasterNode(),
         Integer.parseInt(redisProperties.getMasterPort()));
         clientSocket.getOutputStream().write("*1\r\n$4\r\nping\r\n".getBytes(StandardCharsets.UTF_8));
