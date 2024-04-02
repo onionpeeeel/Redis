@@ -10,6 +10,11 @@ public class SlaveServer implements Runnable{
 
     public void run() {
         System.out.println("Running Slave Thread");
+        try {
+            clientSocket = new Socket(redisProperties.getMasterNode(), Integer.parseInt(redisProperties.getMasterPort()))
+        } catch (IOException e) {
+            System.out.println("IOException: " + e.getMessage());
+        }
         multiConnect();
     }
 
@@ -21,7 +26,7 @@ public class SlaveServer implements Runnable{
 
     private final static TimedCache<String, String> commandList = new TimedCache<>();
 
-    private final Socket clientSocket;
+    private Socket clientSocket;
 
     private final String role;
 
