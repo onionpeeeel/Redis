@@ -45,7 +45,7 @@ public class Main {
         if ("master".equals(role)) {
           executorService.submit(new MasterServer(clientSocket, role, redisProperties));
         } else {
-          executorService.submit(new SlaveServer(clientSocket, role));
+          executorService.submit(new SlaveServer(clientSocket, role, redisProperties));
         }
       }
     }
