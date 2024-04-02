@@ -39,15 +39,18 @@ public class Main {
          ExecutorService executorService = Executors.newFixedThreadPool(8)) {
       serverSocket.setReuseAddress(true);
 
+      if (Objects.equals("master", role)) {
+        clientSocket = new Socket(redisProperties.getMasterNode(),
+        Integer.parseInt(redisProperties.getMasterPort()));
+        clientSocket.getOutputStream().write("*1\r\n$4\r\nping\r\n".getBytes(StandardCharsets.UTF_8));
+      }
+
       while (true) {
         clientSocket = serverSocket.accept();
         System.out.println("Got connection with " + clientSocket.getPort());
         if ("master".equals(role)) {
           executorService.submit(new MasterServer(clientSocket, role, redisProperties));
         } else {
-//          clientSocket = new Socket(redisProperties.getMasterNode(),
-//                  Integer.parseInt(redisProperties.getMasterPort()));
-//          clientSocket.getOutputStream().write("*1\r\n$4\r\nping\r\n".getBytes(StandardCharsets.UTF_8));
           executorService.submit(new SlaveServer(clientSocket, role, redisProperties));
         }
       }
