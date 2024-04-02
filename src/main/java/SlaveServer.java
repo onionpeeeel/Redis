@@ -4,6 +4,7 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class SlaveServer implements Runnable{
 
@@ -11,6 +12,14 @@ public class SlaveServer implements Runnable{
         System.out.println("Running Slave Thread");
         multiConnect();
     }
+
+    public final static byte[] PONG = "+PONG\r\n".getBytes(StandardCharsets.UTF_8);
+
+    public final static byte[] OK = "+OK\r\n".getBytes(StandardCharsets.UTF_8);
+
+    public final static byte[] HEY = "+hey\r\n".getBytes(StandardCharsets.UTF_8);
+
+    private final static TimedCache<String, String> commandList = new TimedCache<>();
 
     private final Socket clientSocket;
 
@@ -49,8 +58,44 @@ public class SlaveServer implements Runnable{
                         storedCommand.add(br.readLine());
                     }
                     String command = storedCommand.get(1);
-                    clientSocket.getOutputStream().write(returnCommand("PING", "simple"));
-
+                    switch (command.toLowerCase()) {
+                        case Commands.PING:
+                            clientSocket.getOutputStream().write(PONG);
+                            break;
+                        case Commands.ECHO:
+                            clientSocket.getOutputStream().write(returnCommand(storedCommand.get(3), "simple"));
+                            break;
+                        case Commands.SET:
+                            String key = storedCommand.get(3);
+                            String value = storedCommand.get(5);
+                            if (storedCommand.size() > 6 && Objects.equals(Commands.PX, storedCommand.get(7))) {
+                                if (storedCommand.size() > 8) {
+                                    commandList.put(key, value, Long.parseLong(storedCommand.get(9)));
+                                } else {
+                                    commandList.put(key, value, -1);
+                                }
+                            } else {
+                                commandList.put(key, value, -1);
+                            }
+                            clientSocket.getOutputStream().write(OK);
+                            break;
+                        case Commands.GET:
+                            String getKey = storedCommand.get(3);
+                            String getValue = commandList.get(getKey);
+                            if (getValue == null) {
+                                clientSocket.getOutputStream().write("$-1\r\n".getBytes(StandardCharsets.UTF_8));
+                            } else {
+                                clientSocket.getOutputStream().write(returnCommand(getValue, "bulk"));
+                            }
+                        case Commands.INFO:
+                            if (storedCommand.size() > 3) {
+                                String returnVal = "role:" + role + "\n" + "master_replid:" + redisProperties.getReplicationId() + "\n" +
+                                        "master_repl_offset:" + redisProperties.getReplicationOffset();
+                            } else {
+                                clientSocket.getOutputStream().write(returnCommand("role:" + role, "bulk"));
+                            }
+                            break;
+                    }
                 }
                 input = br.readLine();
             }
