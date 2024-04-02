@@ -9,6 +9,7 @@ public class SlaveServer implements Runnable{
 
     public void run() {
         System.out.println("Running Slave Thread");
+        multiConnect();
     }
 
     private final Socket clientSocket;
