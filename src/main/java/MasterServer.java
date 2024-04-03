@@ -52,18 +52,7 @@ public class MasterServer implements Runnable{
     public void multiConnect() {
         try {
             BufferedReader br = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            String input = null;
-            String line;
-            List<String> inputList = new ArrayList<>();
-            if (br.readLine() != null && br.readLine() instanceof String) {
-                input = br.readLine();
-            } else {
-                while ((line = br.readLine()) != null) {
-                    inputList.add(line);
-                }
-            }
-
-
+            String input = br.readLine();
             while (input != null && !input.isEmpty()) {
                 if (input.startsWith("*")) {
                     int numOfLines = Integer.parseInt(String.valueOf(input.charAt(1)));
