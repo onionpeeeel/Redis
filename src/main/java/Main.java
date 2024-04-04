@@ -50,7 +50,6 @@ public class Main {
         if ("master".equals(role)) {
           executorService.submit(new MasterServer(clientSocket, role, redisProperties));
         } else {
-          clientSocket.getOutputStream().write("*1\r\n$4\r\nping\r\n".getBytes(StandardCharsets.UTF_8));
           executorService.submit(new SlaveServer(clientSocket, role, redisProperties));
         }
       }
