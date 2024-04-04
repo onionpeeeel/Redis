@@ -101,13 +101,13 @@ public class SlaveServer implements Runnable{
                                 clientSocket.getOutputStream().write(returnCommand("role:" + role, "bulk"));
                             }
                             break;
-                        default:
-                            clientSocket.getOutputStream().write("*1\r\n$4\r\nping\r\n".getBytes(StandardCharsets.UTF_8));
-                            break;
                     }
                 }
                 input = br.readLine();
             }
+            System.out.println("-------------------------");
+            System.out.println("NONE");
+            System.out.println("-------------------------");
         } catch (IOException e) {
             System.out.println("IOException: " + e.getMessage());
         } finally {
