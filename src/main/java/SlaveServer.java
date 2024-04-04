@@ -41,11 +41,12 @@ public class SlaveServer implements Runnable{
         } else if ("bulk".equals(type)) {
             returnCommand = "$" + command.length() + "\r\n" + command + "\r\n";
         }
-
+//        clientSocket.getOutputStream().write("*1\r\n$4\r\nping\r\n".getBytes(StandardCharsets.UTF_8));
         return returnCommand.getBytes(StandardCharsets.UTF_8);
     }
 
     public void multiConnect() {
+        System.out.println("-----------??--------------");
         try {
 //            clientSocket.getOutputStream().write(Commands.replconf(port).getBytes(StandardCharsets.UTF_8));
 //            clientSocket.getOutputStream().write("*3\r\n$8\r\nREPLCONF\r\n$4\r\ncapa\r\n$6\r\npsync2\r\n".getBytes(StandardCharsets.UTF_8));
@@ -106,7 +107,6 @@ public class SlaveServer implements Runnable{
                 input = br.readLine();
             }
             System.out.println("-------------------------");
-            System.out.println("NONE");
             System.out.println("-------------------------");
         } catch (IOException e) {
             System.out.println("IOException: " + e.getMessage());
