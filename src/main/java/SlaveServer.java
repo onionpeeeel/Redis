@@ -49,6 +49,9 @@ public class SlaveServer implements Runnable{
         try {
             BufferedReader br = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             String input = br.readLine();
+            System.out.println("------------------");
+            System.out.println(input);
+            System.out.println("------------------");
 
             while (input != null && !input.isEmpty()) {
                 if (input.startsWith("*")) {
