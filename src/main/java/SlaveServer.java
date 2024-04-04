@@ -56,7 +56,7 @@ public class SlaveServer implements Runnable{
             System.out.println("------------------");
             System.out.println(input);
             System.out.println("------------------");
-            clientSocket.getOutputStream().write("*1\r\n$4\r\nping\r\n".getBytes(StandardCharsets.UTF_8));
+//            clientSocket.getOutputStream().write("*1\r\n$4\r\nping\r\n".getBytes(StandardCharsets.UTF_8));
             while (input != null && !input.isEmpty()) {
                 if (input.startsWith("*")) {
                     int numOfLines = Integer.parseInt(String.valueOf(input.charAt(1)));
@@ -65,6 +65,9 @@ public class SlaveServer implements Runnable{
                         storedCommand.add(br.readLine());
                     }
                     String command = storedCommand.get(1);
+                    System.out.println("-----------------------");
+                    System.out.println(storedCommand);
+                    System.out.println("-----------------------");
                     switch (command.toLowerCase()) {
                         case Commands.PING:
                             clientSocket.getOutputStream().write(PONG);
