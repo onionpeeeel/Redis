@@ -43,6 +43,7 @@ public class Main {
         clientSocket = new Socket(redisProperties.getMasterNode(),
         Integer.parseInt(redisProperties.getMasterPort()));
         clientSocket.getOutputStream().write("*1\r\n$4\r\nping\r\n".getBytes(StandardCharsets.UTF_8));
+        clientSocket.getOutputStream().write(Commands.replconf(port).getBytes(StandardCharsets.UTF_8));
       }
 
       while (true) {
