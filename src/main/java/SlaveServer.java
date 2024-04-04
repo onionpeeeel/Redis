@@ -48,7 +48,6 @@ public class SlaveServer implements Runnable{
     public void multiConnect() {
         System.out.println("-----------??--------------");
         try {
-//            clientSocket.getOutputStream().write("*3\r\n$5\r\nPSYNC\r\n$1\r\n?\r\n$2\r\n-1\r\n".getBytes(StandardCharsets.UTF_8));
             BufferedReader br = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             String input = br.readLine();
             while (input != null && !input.isEmpty()) {
