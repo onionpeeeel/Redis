@@ -53,6 +53,7 @@ public class MasterServer implements Runnable{
         try {
             BufferedReader br = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             String input = br.readLine();
+            System.out.println(input);
             while (input != null && !input.isEmpty()) {
                 if (input.startsWith("*")) {
                     int numOfLines = Integer.parseInt(String.valueOf(input.charAt(1)));
