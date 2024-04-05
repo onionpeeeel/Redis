@@ -42,9 +42,11 @@ public class Main {
       if (!Objects.equals("master", role)) {
         clientSocket = new Socket(redisProperties.getMasterNode(),
         Integer.parseInt(redisProperties.getMasterPort()));
+        System.out.println("--------------------------1");
       }
 
       while (true) {
+        System.out.println("---------------------------2");
         clientSocket = serverSocket.accept();
         System.out.println("Got connection with " + clientSocket.getPort());
         if ("master".equals(role)) {
