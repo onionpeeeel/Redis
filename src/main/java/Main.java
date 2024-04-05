@@ -50,8 +50,10 @@ public class Main {
         clientSocket = serverSocket.accept();
         System.out.println("Got connection with " + clientSocket.getPort());
         if ("master".equals(role)) {
+          System.out.println("---------------------------3");
           executorService.submit(new MasterServer(clientSocket, role, redisProperties));
         } else {
+          System.out.println("---------------------------4");
           executorService.submit(new SlaveServer(clientSocket, role, redisProperties, port));
         }
       }
