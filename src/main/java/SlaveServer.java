@@ -25,12 +25,15 @@ public class SlaveServer implements Runnable{
 
     private final String role;
 
+    private final Integer port;
+
     private final RedisProperties redisProperties;
 
-    public SlaveServer(Socket clientSocket, String role, RedisProperties redisProperties) {
+    public SlaveServer(Socket clientSocket, String role, RedisProperties redisProperties, int port) {
         this.clientSocket = clientSocket;
         this.role = role;
         this.redisProperties = redisProperties;
+        this.port = port;
     }
 
     public byte[] returnCommand(String command, String type) {
@@ -48,6 +51,11 @@ public class SlaveServer implements Runnable{
     public void multiConnect() {
         System.out.println("-----------??--------------");
         try {
+
+            clientSocket.getOutputStream().write("*1\r\n$4\r\nping\r\n".getBytes(StandardCharsets.UTF_8));
+            clientSocket.getOutputStream().write(Commands.replconf(port).getBytes(StandardCharsets.UTF_8));
+            clientSocket.getOutputStream().write("*3\r\n$8\r\nREPLCONF\r\n$4\r\ncapa\r\n$6\r\npsync2\r\n".getBytes(StandardCharsets.UTF_8));
+            clientSocket.getOutputStream().write("*3\r\n$5\r\nPSYNC\r\n$1\r\n?\r\n$2\r\n-1\r\n".getBytes(StandardCharsets.UTF_8));
             BufferedReader br = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             String input = br.readLine();
             while (input != null && !input.isEmpty()) {
