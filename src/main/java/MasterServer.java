@@ -3,10 +3,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class MasterServer implements Runnable{
 
@@ -120,7 +117,7 @@ public class MasterServer implements Runnable{
                             break;
                         case Commands.PSYNC:
                             clientSocket.getOutputStream().write(returnCommand("FULLRESYNC " + redisProperties.getReplicationId() + " 0", "simple"));
-                            clientSocket.getOutputStream().write(returnCommand(redisProperties.getRDBContent(), "rdb"));
+                            clientSocket.getOutputStream().write(returnCommand(decodeBase64(redisProperties.getRDBContent()), "rdb"));
 //                        case Commands.REPLCONF:
 //                            if (storedCommand.contains(Commands.PSYNC)) {
 //                                String psyncSent = "+FULLRESYNC " + redisProperties.getReplicationId() + " 0\r\n";
@@ -142,6 +139,11 @@ public class MasterServer implements Runnable{
                 System.out.println("IOException: " + e.getMessage());
             }
         }
+    }
+
+    public String decodeBase64(String command) {
+        byte[] decodeCommand = Base64.getDecoder().decode(command);
+        return new String(decodeCommand);
     }
 
 
