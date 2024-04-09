@@ -116,6 +116,8 @@ public class MasterServer implements Runnable{
                                 clientSocket.getOutputStream().write(OK);
                             }
                             break;
+                        case Commands.PSYNC:
+                            clientSocket.getOutputStream().write(returnCommand("FULLRESYNC " + redisProperties.getReplicationId(), "simple"));
 //                        case Commands.REPLCONF:
 //                            if (storedCommand.contains(Commands.PSYNC)) {
 //                                String psyncSent = "+FULLRESYNC " + redisProperties.getReplicationId() + " 0\r\n";
