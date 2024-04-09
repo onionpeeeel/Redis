@@ -110,6 +110,11 @@ public class MasterServer implements Runnable{
                             break;
                         case Commands.REPLCONF:
                             System.out.println(storedCommand);
+                            if (storedCommand.get(4).equalsIgnoreCase("listening-port")) {
+                                clientSocket.getOutputStream().write(OK);
+                            } else if (storedCommand.get(4).equalsIgnoreCase("capa")) {
+                                clientSocket.getOutputStream().write(OK);
+                            }
                             break;
 //                        case Commands.REPLCONF:
 //                            if (storedCommand.contains(Commands.PSYNC)) {
