@@ -19,6 +19,8 @@ public class Main {
     RedisProperties redisProperties = new RedisProperties();
 
     Socket clientSocket;
+    PrintWriter writeClient;
+    BufferedReader readClient;
     int port = 6379;
     String role = "master";
 
@@ -41,16 +43,29 @@ public class Main {
 
       if (!Objects.equals("master", role)) {
         clientSocket = new Socket(redisProperties.getMasterNode(),
-        Integer.parseInt(redisProperties.getMasterPort()));
+                          Integer.parseInt(redisProperties.getMasterPort()));
+        writeClient = new PrintWriter(clientSocket.getOutputStream(), true);
+        readClient = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         System.out.println("--------------------------1");
-        clientSocket.getOutputStream().write("*1\r\n$4\r\nping\r\n".getBytes(StandardCharsets.UTF_8));
-        clientSocket.getOutputStream().flush();
-        clientSocket.getOutputStream().write(Commands.replconf(port).getBytes(StandardCharsets.UTF_8));
-        clientSocket.getOutputStream().flush();
-        clientSocket.getOutputStream().write("*3\r\n$8\r\nREPLCONF\r\n$4\r\ncapa\r\n$6\r\npsync2\r\n".getBytes(StandardCharsets.UTF_8));
-        clientSocket.getOutputStream().flush();
-        clientSocket.getOutputStream().write("*3\r\n$5\r\nPSYNC\r\n$1\r\n?\r\n$2\r\n-1\r\n".getBytes(StandardCharsets.UTF_8));
-        clientSocket.getOutputStream().flush();
+        writeClient.write(toArrayRESP(toBulkString("ping")));
+        writeClient.flush();
+        String resp = readClient.readLine();
+        System.out.println(resp);
+        sendCommand(writeClient, toArrayRESP(toBulkString("REPLCONF"),
+                toBulkString("listening-port"),
+                toBulkString("6380")));
+        resp = readClient.readLine();
+        System.out.println(resp);
+        sendCommand(writeClient, toArrayRESP(toBulkString("REPLCONF"),
+                toBulkString("capa"),
+                toBulkString("psync2")));
+        resp = readClient.readLine();
+        System.out.println(resp);
+        sendCommand(writeClient, toArrayRESP(toBulkString("PSYNC"),
+                toBulkString("?"),
+                toBulkString("-1")));
+        resp = readClient.readLine();
+        System.out.println(resp);
       }
 
       while (true) {
@@ -74,5 +89,18 @@ public class Main {
 //      Thread thread = new Thread(runnable);
 //      thread.start();
 //    }
+  }
+
+  private static void sendCommand(PrintWriter writeClient, String command) {
+    writeClient.write(command);
+    writeClient.flush();
+  }
+
+  private static String toArrayRESP(String... respStrings) {
+    return "*" + respStrings.length + "\r\n" + String.join("", respStrings);
+  }
+
+  private static String toBulkString(String command) {
+    return String.join("\r\n", "$" + command.length(), command, "");
   }
 }
