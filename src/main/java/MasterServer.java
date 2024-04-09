@@ -44,6 +44,8 @@ public class MasterServer implements Runnable{
             returnCommand = "+" + command + "\r\n";
         } else if ("bulk".equals(type)) {
             returnCommand = "$" + command.length() + "\r\n" + command + "\r\n";
+        } else if ("rdb".equals(type)) {
+            returnCommand = "$" + command.length() + "\r\n" + command;
         }
 
         return returnCommand.getBytes(StandardCharsets.UTF_8);
@@ -118,6 +120,7 @@ public class MasterServer implements Runnable{
                             break;
                         case Commands.PSYNC:
                             clientSocket.getOutputStream().write(returnCommand("FULLRESYNC " + redisProperties.getReplicationId() + " 0", "simple"));
+                            clientSocket.getOutputStream().write(returnCommand(redisProperties.getRDBContent(), "rdb"));
 //                        case Commands.REPLCONF:
 //                            if (storedCommand.contains(Commands.PSYNC)) {
 //                                String psyncSent = "+FULLRESYNC " + redisProperties.getReplicationId() + " 0\r\n";

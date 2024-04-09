@@ -6,6 +6,8 @@ public class RedisProperties {
     private String replicationId = "8371b4fb1155b71f4a04d3e1bc3e18c4a990aeeb";
     private Integer replicationOffset = 0;
 
+    private String RDBContent = "UkVESVMwMDEx+glyZWRpcy12ZXIFNy4yLjD6CnJlZGlzLWJpdHPAQPoFY3RpbWXCbQi8ZfoIdXNlZC1tZW3CsMQQAPoIYW9mLWJhc2XAAP/wbjv+wP9aog==";
+
     public String getMasterNode() {
         return masterNode;
     }
@@ -36,6 +38,14 @@ public class RedisProperties {
 
     public void setReplicationOffset(Integer replicationOffset) {
         this.replicationOffset = replicationOffset;
+    }
+
+    public String getRDBContent() {
+        return RDBContent;
+    }
+
+    public void setRDBContent(String rdbContent) {
+        this.RDBContent = rdbContent;
     }
 
     public boolean isReplicaOff() {
