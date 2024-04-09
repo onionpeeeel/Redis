@@ -45,16 +45,12 @@ public class Main {
         System.out.println("--------------------------1");
         clientSocket.getOutputStream().write("*1\r\n$4\r\nping\r\n".getBytes(StandardCharsets.UTF_8));
         clientSocket.getOutputStream().flush();
-        clientSocket.getInputStream().read();
         clientSocket.getOutputStream().write(Commands.replconf(port).getBytes(StandardCharsets.UTF_8));
         clientSocket.getOutputStream().flush();
-        clientSocket.getInputStream().read();
         clientSocket.getOutputStream().write("*3\r\n$8\r\nREPLCONF\r\n$4\r\ncapa\r\n$6\r\npsync2\r\n".getBytes(StandardCharsets.UTF_8));
         clientSocket.getOutputStream().flush();
-        clientSocket.getInputStream().read();
         clientSocket.getOutputStream().write("*3\r\n$5\r\nPSYNC\r\n$1\r\n?\r\n$2\r\n-1\r\n".getBytes(StandardCharsets.UTF_8));
         clientSocket.getOutputStream().flush();
-        clientSocket.getInputStream().read();
       }
 
       while (true) {
@@ -69,6 +65,8 @@ public class Main {
           executorService.submit(new SlaveServer(clientSocket, role, redisProperties, port));
         }
       }
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
     }
 
 //    while (true) {
