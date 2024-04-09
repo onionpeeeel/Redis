@@ -53,15 +53,22 @@ public class MasterServer implements Runnable{
         try {
             BufferedReader br = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             String input = br.readLine();
-            System.out.println(input);
+            System.out.println("hrere ~~~ ~ ~~~ ~~~~ ~");
+            System.out.println("123" +input);
+            System.out.println("111212121212121212122211");
             while (input != null && !input.isEmpty()) {
                 if (input.startsWith("*")) {
+                    System.out.println("here ~~~");
                     int numOfLines = Integer.parseInt(String.valueOf(input.charAt(1)));
                     ArrayList<String> storedCommand = new ArrayList<>(numOfLines * 2);
                     for (int i = 0; i < numOfLines * 2; i++) {
                         storedCommand.add(br.readLine());
                     }
                     String command = storedCommand.get(1);
+                    System.out.println("-------------------------1");
+                    System.out.println(command);
+                    System.out.println("-----------------------2");
+                    System.out.println(storedCommand);
                     switch (command.toLowerCase()) {
                         case Commands.PING:
                             clientSocket.getOutputStream().write(PONG);
@@ -100,6 +107,9 @@ public class MasterServer implements Runnable{
                             } else {
                                 clientSocket.getOutputStream().write(returnCommand("role:" + role, "bulk"));
                             }
+                            break;
+                        case Commands.REPLCONF:
+                            System.out.println(storedCommand);
                             break;
 //                        case Commands.REPLCONF:
 //                            if (storedCommand.contains(Commands.PSYNC)) {
