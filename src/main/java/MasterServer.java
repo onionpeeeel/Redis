@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
@@ -117,7 +118,9 @@ public class MasterServer implements Runnable{
                             break;
                         case Commands.PSYNC:
                             clientSocket.getOutputStream().write(returnCommand("FULLRESYNC " + redisProperties.getReplicationId() + " 0", "simple"));
-                            clientSocket.getOutputStream().write(returnCommand(decodeBase64(redisProperties.getRDBContent()), "rdb"));
+                            byte[] emptyRdb = decodeBase64(redisProperties.getRDBContent());
+                            ByteBuffer buffer = writeRdb(emptyRdb);
+                            clientSocket.getOutputStream().write(buffer.array());
 //                        case Commands.REPLCONF:
 //                            if (storedCommand.contains(Commands.PSYNC)) {
 //                                String psyncSent = "+FULLRESYNC " + redisProperties.getReplicationId() + " 0\r\n";
@@ -141,10 +144,20 @@ public class MasterServer implements Runnable{
         }
     }
 
-    public String decodeBase64(String command) {
+    public byte[] decodeBase64(String command) {
         byte[] decodeCommand = Base64.getDecoder().decode(command);
-        return new String(decodeCommand);
+        return decodeCommand;
     }
+
+    public ByteBuffer writeRdb(byte[] emptyRdb) throws IOException {
+        byte[] fileSize = "$%s\r\n".formatted(emptyRdb.length).getBytes(StandardCharsets.UTF_8);
+        ByteBuffer byteBuffer = ByteBuffer.wrap(new byte[fileSize.length + emptyRdb.length]);
+        byteBuffer.put(fileSize);
+        byteBuffer.put(emptyRdb);
+
+        return byteBuffer;
+    }
+
 
 
 }
